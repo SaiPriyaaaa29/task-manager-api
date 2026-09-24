@@ -1,5 +1,5 @@
 package com.saipriya.task_manager_api.controller;
-
+import jakarta.validation.Valid;
 import com.saipriya.task_manager_api.model.Task;
 import com.saipriya.task_manager_api.model.TaskStatus;
 import com.saipriya.task_manager_api.service.TaskService;
@@ -30,12 +30,12 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Task createTask(@RequestBody Task task) {
+    public Task createTask(@Valid @RequestBody Task task) {
         return taskService.createTask(task);
     }
 
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
+    public Task updateTask(@PathVariable Long id,@Valid @RequestBody Task task) {
         return taskService.updateTask(id, task);
     }
 
