@@ -1,5 +1,5 @@
 package com.saipriya.task_manager_api.model;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,7 +34,10 @@ public class Task {
     void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
-
+    @JsonIgnore
+@ManyToOne(fetch = FetchType.LAZY, optional = false)
+@JoinColumn(name = "user_id", nullable = false)
+private User owner;
     // Required by JPA
     public Task() {
     }
@@ -56,4 +59,6 @@ public class Task {
     public void setStatus(TaskStatus status) { this.status = status; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
+    public User getOwner() { return owner; }
+    public void setOwner(User owner) { this.owner = owner; }
 }
