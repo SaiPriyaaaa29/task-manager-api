@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: taskdb
+      MYSQL_ROOT_PASSWORD: localdevpass
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-plocaldevpass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://db:3306/taskdb
+      DB_USERNAME: root
+      DB_PASSWORD: localdevpass
+      JWT_SECRET: ${JWT_SECRET}
+
+volumes:
+  db-data:
